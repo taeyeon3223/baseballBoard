@@ -20,7 +20,7 @@
                 <input type="text" id="title" class="form-control" value="<?= $b->title ?>">
             </div>
             <p class="mt-3">
-                <span class="mr-3"><?= $b->writerName ?></span>
+                <span class="mr-3"><?= htmlentities($b->writerName) ?></span>
                 <span class="mr-3"><?= date("y.m.d", strtotime($b->date)) ?></span>
                 <span class="mr-3">조회 <?= number_format($b->views) ?></span>
                 <span class="mr-3">추천 <?= number_format($b->recom) ?></span>

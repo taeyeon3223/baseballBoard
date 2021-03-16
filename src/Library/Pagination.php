@@ -5,7 +5,6 @@ namespace Eve\Library;
 class Pagination
 {
     public $pagePerChapter = 5;
-    public $articlePerPage = 10;
     public $next = true;
     public $prev = true;
 
@@ -14,9 +13,9 @@ class Pagination
     public $page = 1;
     public $totalPage;
 
-    public function __construct($total, $page)
+    public function __construct($total, $page, $articlePerPage)
     {
-        $this->totalPage = ceil($total / $this->articlePerPage);
+        $this->totalPage = ceil($total / $articlePerPage);
         $this->end = ceil($page / $this->pagePerChapter) * $this->pagePerChapter;
         $this->start = $this->end - $this->pagePerChapter + 1;
 

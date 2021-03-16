@@ -77,7 +77,7 @@ class Board {
             document.querySelector("#listBtn").addEventListener("click", () => {
                 const list = this.getUrl();
                 const get = list[1];
-                location.href = `/board?${get}`;
+                location.href = `/board?${get.split("&")[0]}`;
             });
         }
 
@@ -127,6 +127,16 @@ class Board {
                         }
                     }
                 })
+            });
+        }
+
+        if (document.querySelector("#viewBtn")) {
+            document.querySelector("#viewBtn").addEventListener("click", () => {
+                const option = document.querySelector("#option").value;
+                if (option * 1 < 10 || option * 1 > 50 || !Number.isInteger(option * 1 / 10)) return;
+                let url = document.location.href.split("&p=")[0] + `&p=1`;
+                url = url + `&option=${option}`;
+                location.href = url;
             });
         }
     }

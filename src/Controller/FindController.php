@@ -25,7 +25,9 @@ class FindController extends MasterController
         if ($user) {
             $usql = "UPDATE users SET password = PASSWORD(?) WHERE id = ?";
             $result = DB::execute($usql, [$newPw, $nowUser]);
-            if ($result) echo true;
+            $copyusql = "UPDATE usersbackup SET password = PASSWORD(?) WHERE id = ?";
+            $copyresult = DB::execute($copyusql, [$newPw, $nowUser]);
+            if ($result && $copyresult) echo true;
         } else echo "DB오류";
     }
     
@@ -49,7 +51,9 @@ class FindController extends MasterController
         if ($user) {
             $usql = "UPDATE users SET password = PASSWORD(?) WHERE id = ?";
             $result = DB::execute($usql, ["12345678", $id]);
-            if ($result) echo "변경 완료";
+            $copyusql = "UPDATE usersbackup SET password = PASSWORD(?) WHERE id = ?";
+            $copyresult = DB::execute($usql, ["12345678", $id]);
+            if ($result && $copyresult) echo "변경 완료";
         } else echo false;
     }
 }

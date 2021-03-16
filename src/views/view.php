@@ -14,9 +14,9 @@
             </div>
         </div>
         <div id="writeForm">
-            <h4><?= $b->title ?></h4>
+            <h4><?= htmlentities($b->title) ?></h4>
             <p>
-                <span class="mr-3"><?= $b->writerName ?></span>
+                <span class="mr-3"><?= htmlentities($b->writerName) ?></span>
                 <span class="mr-3"><?= date("y.m.d", strtotime($b->date)) ?></span>
                 <span class="mr-3">조회 <?= number_format($b->views) ?></span>
                 <span class="mr-3">추천 <?= number_format($b->recom) ?></span>
@@ -41,7 +41,7 @@
             <div id="commentList">
                 <?php foreach ($comList as $c) : ?>
                     <div class="com w-100 mx-auto d-flex">
-                        <b title="<?= $c->writerName ?>"><?= $c->writerName ?></b>
+                        <b title="<?= htmlentities($c->writerName) ?>"><?= htmlentities($c->writerName) ?></b>
                         <pre><?= htmlentities($c->content) ?></pre>
                         <span><?= $c->date ?></span>
                     </div>

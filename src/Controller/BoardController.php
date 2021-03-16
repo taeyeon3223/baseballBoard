@@ -22,13 +22,16 @@ class BoardController extends MasterController
 
         if (isset($_GET['p']) && is_numeric($_GET['p'])) $page = $_GET['p'] * 1;
 
-        $start = ($page - 1) * 10;
-        $sql = "SELECT * FROM boards WHERE league = ? ORDER BY id DESC LIMIT {$start}, 10";
+        $option = 10;
+        if (isset($_GET['option']) && is_numeric($_GET['option'])) $option = $_GET['option'];
+
+        $start = ($page - 1) * $option;
+        $sql = "SELECT * FROM boards WHERE league = ? ORDER BY id DESC LIMIT {$start}, {$option}";
         $list = DB::fetchAll($sql, [strtolower($lg)]);
 
         $cntSql = "SELECT count(*) AS cnt FROM boards WHERE league = ?";
         $cnt = DB::fetch($cntSql, [$lg])->cnt;
-        $pg = new Pagination($cnt, $page);
+        $pg = new Pagination($cnt, $page, $option);
 
         if ($cnt > 0) {
             if ($page < 1 || $page > ceil($cnt / 10)) echo "<script>history.back();</script>";
@@ -63,8 +66,10 @@ class BoardController extends MasterController
 
         $sql = "INSERT INTO boards (title, writerId, writerName, content, date, views, recom, league) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $result = DB::execute($sql, [$title, $writerId, $writerName, $content, $views, $recom, $league]);
+        $copysql = "INSERT INTO boardsbackup (title, writerId, writerName, content, date, views, recom, league) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
+        $copyresult = DB::execute($copysql, [$title, $writerId, $writerName, $content, $views, $recom, $league]);
 
-        if ($result) echo "성공";
+        if ($result && $copyresult) echo "성공";
         else echo "실패";
     }
 
@@ -91,8 +96,12 @@ class BoardController extends MasterController
             $views = $list->views + 1;
             $usql = "UPDATE boards SET views = ? WHERE id = ?";
             $result = DB::execute($usql, [$views, $id]);
-            $b = DB::fetch("SELECT * FROM boards WHERE id = ?", [$id]);
-            $this->render("view", ['b' => $b, 'league' => $lg, 'comList' => $comments]);
+            $copyusql = "UPDATE boardsbackup SET views = ? WHERE id = ?";
+            $copyresult = DB::execute($copyusql, [$views, $id]);
+            if ($result && $copyresult) {
+                $b = DB::fetch("SELECT * FROM boards WHERE id = ?", [$id]);
+                $this->render("view", ['b' => $b, 'league' => $lg, 'comList' => $comments]);
+            }
         } else Lib::msgAndBack("잘못된 주소입니다.");
     }
 
@@ -121,11 +130,14 @@ class BoardController extends MasterController
         $arr = json_encode($userRecom);
         $userRecSql = "UPDATE users SET recomId = ? WHERE id = ?";
         $userRec = DB::execute($userRecSql, [$arr, $userId]);
-        
+        $copyuserRecSql = "UPDATE usersbackup SET recomId = ? WHERE id = ?";
+        $copyuserRec = DB::execute($copyuserRecSql, [$arr, $userId]);
 
         $usql = "UPDATE boards SET recom = ? WHERE id = ?";
         $result = DB::execute($usql, [$recom, $id]);
-        if ($result && $userRec) echo "성공";
+        $copyusql = "UPDATE boardsbackup SET recom = ? WHERE id = ?";
+        $copyresult = DB::execute($copyusql, [$recom, $id]);
+        if ($result && $userRec && $copyuserRec && $copyresult) echo "성공";
         else echo "실패";
     }
 
@@ -138,7 +150,9 @@ class BoardController extends MasterController
         $writerName = $_SESSION['user']->name;
         $sql = "INSERT INTO comments (boardId, content, writerId, writerName, date) VALUES (?, ?, ?, ?, NOW())";
         $result = DB::execute($sql, [$id, $content, $writerId, $writerName]);
-        if ($result) {
+        $copysql = "INSERT INTO commentsbackup (boardId, content, writerId, writerName, date) VALUES (?, ?, ?, ?, NOW())";
+        $copyresult = DB::execute($copysql, [$id, $content, $writerId, $writerName]);
+        if ($result && $copyresult) {
             $list = array("id" => $id, "content" => $content, "writerId" => $writerId, "writerName" => $writerName, "date" => date("Y-m-d H:i:s"));
             echo json_encode($list, JSON_UNESCAPED_UNICODE);
         } else echo "실패";
@@ -221,8 +235,10 @@ class BoardController extends MasterController
 
         $sql = "UPDATE boards SET title = ?, content = ? WHERE id = ?";
         $result = DB::execute($sql, [$title, $content, $id]);
+        $copysql = "UPDATE boardsbackup SET title = ?, content = ? WHERE id = ?";
+        $copyresult = DB::execute($copysql, [$title, $content, $id]);
 
-        if ($result) echo "성공";
+        if ($result && $copyresult) echo "성공";
         else echo "실패";
     }
 }

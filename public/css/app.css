@@ -229,10 +229,18 @@ section:not(#mainPage):nth-child(3) {
 
 .boardBlock>ul>li::before {
     content: "";
-    width: 2px;
-    height: 2px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
     margin-right: 8px;
     background-color: var(--red);
+}
+
+.boardBlock>ul>li>a {
+    max-width: 220px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .moreBtn {

@@ -22,7 +22,9 @@ class UserController extends MasterController
         } else {
             $isql = "INSERT INTO users (id, name, password) VALUES (?, ?, PASSWORD(?))";
             $result = DB::execute($isql, [$id, $name, $password]);
-            if ($result) echo true;
+            $copyisql = "INSERT INTO usersbackup (id, name, password) VALUES (?, ?, PASSWORD(?))";
+            $copyresult = DB::execute($copyisql, [$id, $name, $password]);
+            if ($result && $copyresult) echo true;
             else echo false;
         }
     }
@@ -39,6 +41,8 @@ class UserController extends MasterController
             if (!$admin) {
                 $sql = "INSERT INTO users (id, name, password) VALUES (?, ?, PASSWORD(?))";
                 $result = DB::execute($sql, [$id, "관리자", "admin1234"]);
+                $copysql = "INSERT INTO usersbackup (id, name, password) VALUES (?, ?, PASSWORD(?))";
+                $copyresult = DB::execute($copysql, [$id, "관리자", "admin1234"]);
             }
         }
         
@@ -68,7 +72,9 @@ class UserController extends MasterController
         $date = date("Y-m-d", $timestamp);
         $sql = "UPDATE users SET stop = ? WHERE id = ?";
         $result = DB::execute($sql, [$date, $id]);
-        if ($result) echo "성공";
+        $copysql = "UPDATE usersbackup SET stop = ? WHERE id = ?";
+        $copyresult = DB::execute($copysql, [$date, $id]);
+        if ($result && $copyresult) echo "성공";
         else echo "실패";
     }
 
