@@ -30,9 +30,9 @@
                 <li><a href="/board?league=npb">NPB</a></li>
                 <li><a href="/board?league=cpbl">CPBL</a></li>
             </ul>
-            <ul id="loginMenu" class="d-flex justify-content-between">
+            <ul id="loginMenu" class="d-flex justify-content-end">
                 <?php if (__SESSION) : ?>
-                    <li>
+                    <li title="<?= htmlentities($_SESSION['user']->name) ?>">
                         <?php if ($_SESSION['user']->id === "admin") : ?>
                             <a href="/admin" class="text-dark">관리자</a>
                         <?php else : ?>

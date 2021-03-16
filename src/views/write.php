@@ -1,6 +1,6 @@
 <section id="page" class="position-relative">
     <div id="topVisualImg" class="position-relative">
-        <h6>BASEBALL GALLERY</h6>
+        <h1 class="m-0"><i><b>Baseball Gallary</b></i></h1>
     </div>
 </section>
 

@@ -74,13 +74,11 @@ class Board {
         }
 
         if (document.querySelector("#listBtn")) {
-
             document.querySelector("#listBtn").addEventListener("click", () => {
                 const list = this.getUrl();
                 const get = list[1];
                 location.href = `/board?${get.split("&")[0]}`;
             });
-
         }
 
         if (document.querySelector("#recomBtn")) {

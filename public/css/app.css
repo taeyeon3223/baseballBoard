@@ -80,7 +80,18 @@ ul>li {
 }
 
 #loginMenu {
-    width: 150px;
+    width: 200px;
+}
+
+#loginMenu>li {
+    margin: 0 10px;
+}
+
+#loginMenu>li:nth-child(1)>a {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .color-red {
