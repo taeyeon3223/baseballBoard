@@ -12,8 +12,8 @@
                 <?php foreach ($userList as $b) : ?>
                     <?php if ($b->id !== "admin") : ?>
                         <li class="list-group-item w-100 d-flex">
-                            <span class="userId w-50 h-100"><?= $b->id ?></span>
-                            <span class="userName w-25 h-100"><?= $b->name ?></span>
+                            <span class="userId w-50 h-100"><?= htmlentities($b->id) ?></span>
+                            <span class="userName w-25 h-100"><?= htmlentities($b->name) ?></span>
                             <div class="input-group w-25">
                                 <input type="number" class="form-control" min="1" value="1">
                                 <div class="input-group-append">
